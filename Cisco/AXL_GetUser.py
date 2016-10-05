@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#The purpose of this script is to execute a basic querey against CUCM via AXL
+#The purpose of this script is to execute a basic query against CUCM via AXL
 
 from suds.client import Client
 from suds.sax.element import Element
