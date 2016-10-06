@@ -31,5 +31,16 @@ def getUser(userName):
                 return DEVICEID
         except:
                 return "no device associated"
+        
+def listUser(userName):
+        eSearch = Element('searchCriteria')
+        eUserid = Element('userid').setText('{0}'.format(userName))
+        eSearch.append(eUserid)
+        eReturn = Element('returnedTags')
+        elastName = Element('lastName')
+        eReturn.append(elastName)
+        client = Client(wsdl, location=location, username=username, password=password, headers=authenticationHeader)
+        result = client.service.listUser(eSearch,eReturn)
+        return result
 
 print getUser('Rick.Breidenstein')
