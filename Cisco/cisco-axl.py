@@ -43,4 +43,12 @@ def listUser(userName):
         result = client.service.listUser(eSearch,eReturn)
         return result
 
+def getFields(ns):
+        #outputs the item to a text file so you can easily see what fields are available
+        client = client = Client(wsdl, location=location, username=username, password=password, headers=authenticationHeader)
+        outputfile = open('{0}.txt'.format(ns),'w')
+        OUTPUT = client.factory.create(ns)
+        outputfile.write(str(OUTPUT))
+        return '{0}.txt created'.format(ns)
+
 print getUser('Rick.Breidenstein')
