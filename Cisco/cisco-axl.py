@@ -23,7 +23,7 @@ def getUser(userName):
         "Authorization" : "Basic %s" % base64string
         }
         client = Client(wsdl, location=location, username=username, password=password, headers=authenticationHeader)
-        userName = str(userName)[:-1].lower()
+        userName = str(userName).lower()
         agentName = Element('userid').setText(userName)
         try:
                 getUser = client.service.getUser(agentName)
