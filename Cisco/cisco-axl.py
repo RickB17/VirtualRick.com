@@ -25,6 +25,16 @@ def createClient():
         client = Client(wsdl, location=location, username=username, password=password, headers=authenticationHeader)
         return client
 
+def doDeviceLogout(client, phoneUUID):
+        #phoneUUID in the form returned from getPhone
+        FKDEVICE = client.factory.create('ns0:XFkType')
+        FKDEVICE._uuid = phoneUUID
+        try:
+                doDeviceLogout = client.service.doDeviceLogout(FKDEVICE)
+                return doDeviceLogout
+        except:
+                return "ERROR doDeviceLgout"
+
 def getUser(client, userName):
         userName = str(userName).lower()
         agentName = Element('userid').setText(userName)
