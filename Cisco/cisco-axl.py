@@ -70,3 +70,24 @@ def getFields(client, ns):
         OUTPUT = client.factory.create(ns)
         outputfile.write(str(OUTPUT))
         return '{0}.txt created'.format(ns)
+
+def main(argv):
+        CLIENT = createClient()
+        try:
+                opts, args = getopt.getopt(argv, ["gu","gp"],["getUser=","getPhone="])
+        except getopt.GetoptError as err:
+                print (err)
+                sys.exit(2)
+        for opt, arg in opts:
+                if opt == '--getUser':
+                        print 'expecting a user.name'
+                        USERNAME = arg
+                        print str(getUser(CLIENT, USERNAME))
+                elif opt == '--getPhone':
+                        print 'expecting a SEPMAC'
+                        DEVICEID = arg
+                        print str(getPhone(CLIENT,DEVICEID))
+
+
+if __name__=='__main__':
+        main(sys.argv[1:])
