@@ -34,7 +34,17 @@ def doDeviceLogout(client, phoneUUID):
                 return doDeviceLogout
         except:
                 return "ERROR doDeviceLgout"
-
+        
+def getPhone(client, deviceid):
+        #deviceid in the form of SEPMACADDRESS, the form returned from getUser
+        eDEVICEID = Element('name').setText(deviceid)
+        eRETURN = Element('returnedTags')
+        try:
+                getPhone = client.service.getPhone(eDEVICEID)
+                return getPhone[0][0]['_uuid'][1:-1]
+        except:
+                return "ERROR executing getPhone"
+        
 def getUser(client, userName):
         userName = str(userName).lower()
         agentName = Element('userid').setText(userName)
