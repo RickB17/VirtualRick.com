@@ -70,6 +70,3 @@ def getFields(client, ns):
         OUTPUT = client.factory.create(ns)
         outputfile.write(str(OUTPUT))
         return '{0}.txt created'.format(ns)
-
-CLIENT = createClient()
-print getUser(CLIENT, 'Rick.Breidenstein')
