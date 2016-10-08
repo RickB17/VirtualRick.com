@@ -3,8 +3,15 @@
 
 from suds.client import Client
 from suds.sax.element import Element
+from xml.etree import ElementTree
+import sys, getopt, re, requests
 import base64
 import ssl
+import logging
+import getpass
+import requests
+
+logging.basicConfig(filename='logfile.txt', level=logging.INFO)
 
 def createClient():
         cmserver = 'IP-ADDRESS'
@@ -34,6 +41,21 @@ def doDeviceLogout(client, phoneUUID):
                 return doDeviceLogout
         except:
                 return "ERROR doDeviceLgout"
+
+def emGetSEP(userName):
+        cucm_server = "YOURSERVERIP"
+        emuser = "UserWithExtensionMobilityProxyAutenticationRole"
+        appEmProxyUser = "may be the same as above"
+        appPw = "your super secret and strong password"
+        uri = 'http://{0}:8080/emservice/EMServiceServlet'.format(cucm_server)
+        logging.info(uri)
+        headers = {"Content-Type":"application/x-www-form-urlencoded"}
+        parameters = "<query><appInfo><appID>{0}</appID><appCertificate>{1}</appCertificate></appInfo><userDevicesQuery><userID>{2}</userID></userDevicesQuery></query>".format(appEmProxyUser, appPw, userName)
+        r = requests.post(uri, data={"xml": parameters}, headers=headers)
+        logging.info(r.content)
+        tree = ElementTree.fromstring(r.content)
+        SEP = ElementTree.tostring(tree[0][0][0])[12:-14]
+        return SEP
         
 def getPhone(client, deviceid):
         #deviceid in the form of SEPMACADDRESS, the form returned from getUser
@@ -72,22 +94,32 @@ def getFields(client, ns):
         return '{0}.txt created'.format(ns)
 
 def main(argv):
-        CLIENT = createClient()
         try:
-                opts, args = getopt.getopt(argv, ["gu","gp"],["getUser=","getPhone="])
+                opts, args = getopt.getopt(argv, ["gu","gp","ddl","emSEP"],["getUser=","getPhone=","doDeviceLogout=", "emGetSEP="])
         except getopt.GetoptError as err:
                 print (err)
                 sys.exit(2)
         for opt, arg in opts:
+                print arg
                 if opt == '--getUser':
                         print 'expecting a user.name'
                         USERNAME = arg
+                        CLIENT = createClient()
                         print str(getUser(CLIENT, USERNAME))
                 elif opt == '--getPhone':
                         print 'expecting a SEPMAC'
+                        CLIENT = createClient()
                         DEVICEID = arg
                         print str(getPhone(CLIENT,DEVICEID))
-
+                elif opt == '--doDeviceLogout':
+                        print 'expecting a fkdevice uuid'
+                        CLIENT = createClient()
+                        UUID = arg
+                        print str(doDeviceLogout(CLIENT,UUID))
+                elif opt == '--emGetSEP':
+                        print 'expecting user.name'
+                        USERNAME = arg
+                        print str(emGetSEP(USERNAME))
 
 if __name__=='__main__':
         main(sys.argv[1:])
