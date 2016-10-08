@@ -43,6 +43,7 @@ def doDeviceLogout(client, phoneUUID):
                 return "ERROR doDeviceLgout"
 
 def emGetSEP(userName):
+        #This is not an AXL call. This is going against the Extension Mobility Web Service
         cucm_server = "YOURSERVERIP"
         emuser = "UserWithExtensionMobilityProxyAutenticationRole"
         appEmProxyUser = "may be the same as above"
